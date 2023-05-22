@@ -1,28 +1,14 @@
-<div class="row">
-    <div class="col-2">
-        <ul class="list-unstyled px-2 text-center border-end shadow " style="height:100vh">
-            <br>
-            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Revenir au menu principal</button></a></li>
-            <br>
-            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Projets</button></a></li>
-            <br>
-            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Univers sémantiques</button></a></li>
-            <br>
-            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Branches sémantiques</button></a></li>
-            <br>
-            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Idées</button></a></li>
-            <br>
-            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Traitement</button></a></li>
-        </ul>
-    </div>
-{#     <div class="col-2">
-        <ul class="list-unstyled px-2">
-            <li><a href="#" class="text-decoration-none"></a>Revenir au menu principal</li>
-            <li><a href="#" class="text-decoration-none"></a>Profil</li>
-            <li><a href="#" class="text-decoration-none"></a>Mot de passe</li>
-        </ul>
-    </div> #}
-    <div class="col-10">
-        
-    </div>
-</div>
+<ul class="list-unstyled px-2 text-center border-end shadow" style="min-height:100vh">
+    <br>
+    <li><a href="{{ path('app_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Revenir au menu principal</button></a></li>
+    <br>
+    <li><a href="{{ path('app_projects_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Projets</button></a></li>
+    <br>
+    <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Univers sémantiques</button></a></li>
+    <br>
+    <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Branches sémantiques</button></a></li>
+    <br>
+    <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Idées</button></a></li>
+    <br>
+    <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Traitement</button></a></li>
+</ul>
