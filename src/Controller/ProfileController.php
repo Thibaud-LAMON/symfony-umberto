@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-//use App\Entity\Users;
+use App\Entity\Users;
 use App\Form\EditProfileType;
 use App\Form\EditPasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-//use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-//use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ProfileController extends AbstractController
 {
@@ -35,13 +35,18 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profil/password', name: 'app_profil_password')]
-    public function password(Request $request, EntityManagerInterface $entityManager): Response
+    public function password(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        /** @var Users $user */
         $user = $this->getUser();
         $form = $this->createForm(EditPasswordType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Hash the new password
+            $newPassword = $form->get('password')->getData();
+            $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+            $user->setPassword($hashedPassword);
 
             $entityManager->persist($user);
             $entityManager->flush();

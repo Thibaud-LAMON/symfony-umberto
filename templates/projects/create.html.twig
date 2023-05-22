@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UMBERTO - Créer un projet{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-2">
+        <ul class="list-unstyled px-2 text-center border-end shadow" style="min-height:100vh">
+            <br>
+            <li><a href="{{ path('app_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Revenir au menu principal</button></a></li>
+            <br>
+            <li><a href="{{ path('app_projects_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Projets</button></a></li>
+            <br>
+            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Univers sémantiques</button></a></li>
+            <br>
+            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Branches sémantiques</button></a></li>
+            <br>
+            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Idées</button></a></li>
+            <br>
+            <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary" disabled>Traitement</button></a></li>
+        </ul>
+    </div>
+    <div class="col-10">
+        <br>
+        <div class="container">
+            <div class="row bg-secondary text-center px-5 py-3 rounded-4">
+                <div class="col border-end" >
+                <p style="font-size:14px;">projets créés</p><p style="font-size:24px;">{{ projects }}</p></div>
+                <div class="col border-end">
+                <p style="font-size:14px;">amorces récupérées</p><p style="font-size:24px;">{{ snippets }}</p></div>
+                <div class="col border-end">
+                <p style="font-size:14px;">amorces traitées</p><p style="font-size:24px;">{{ truncated }}</p></div>
+                <div class="col">
+                <p style="font-size:14px;">suggestions</p><p style="font-size:24px;">{{ suggestions }}</p></div>
+            </div>
+        </div>
+        <br>
+        <div class="container col-8">
+            <div class="row">
+                <div class="col">
+                    <h1>Projets création</h1>
+                    {{ form_start(projectForm) }}
+                        {{ form_row(projectForm.name) }}
+
+                        <button type="submit" class="btn btn-primary btn-lg my-3">Créer</button>
+                    {{ form_end(projectForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
