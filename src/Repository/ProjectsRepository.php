@@ -49,6 +49,15 @@ class ProjectsRepository extends ServiceEntityRepository
             ->getSingleScalarResult(); //éxecute la requête
     }
 
+    public function findByUserId($userId)
+    {
+        return $this->createQueryBuilder('p') //créer un objet QueryBuilder avec un alias pour l'entité Projects
+            ->where('p.users = :userId') //où les résultats de 'users' est égale au 'users_id' du projet
+            ->setParameter('userId', $userId) //la variable ':users_id' est la valeur de '$userId'
+            ->getQuery() //convertit le QueryBuilder en une requête SQL
+            ->getResult(); //éxecute la requête
+    }
+
     //    /**
     //     * @return Projects[] Returns an array of Projects objects
     //     */

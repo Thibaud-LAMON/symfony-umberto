@@ -3,53 +3,45 @@
 {% block title %}Usy Accueil{% endblock %}
 
 {% block body %}
+<style>
+    .custom-btn {
+        padding-top: 8.25rem;
+        padding-bottom: 8.25rem;
+        font-size: 3rem;
+        font-weight: bold;
+    }
+</style>
+
 <div class="row">
     <div class="col-12">
 
     <div class="container">
-            <h1>Page d'Accueil USY</h1>
+        <h1>Page d'Accueil USY</h1>
         <p>Bienvenue {{app.user.username}}</p>
     </div>
-        <div class="row justify-content-center align-items-center">
-            <div class="col-3">
-                <a href="{{ path('app_projects_main') }}" class="text-decoration-none"><button class="btn btn-primary fw-bold"
-                style="--bs-btn-padding-y: 8.25rem; --bs-btn-padding-x: 7.279rem; --bs-btn-font-size: 3rem;">
-                    UMBERTO
-                </button></a>
-            </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-primary fw-bold"
-                style="--bs-btn-padding-y: 8.25rem; --bs-btn-padding-x: 11.1803rem; --bs-btn-font-size: 3rem;" disabled>
-                    UGO
-                </button>
-            </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-primary fw-bold"
-                style="--bs-btn-padding-y: 8.25rem; --bs-btn-padding-x: 8.799rem; --bs-btn-font-size: 3rem;" disabled>
-                    URIELLE
-                </button>
-            </div>
+    <div class="row justify-content-center align-items-center gy-4">
+        <div class="col-3">
+            <a href="{{ path('app_projects_main') }}" class="text-decoration-none">
+                <button class="btn btn-primary custom-btn w-100">UMBERTO</button>
+            </a>
         </div>
-        <br>
-        <div class="row justify-content-center align-items-center">
-            <div class="col-3">
-                <button type="button" class="btn btn-primary fw-bold"
-                style="--bs-btn-padding-y: 8.25rem; --bs-btn-padding-x: 9.348rem; --bs-btn-font-size: 3rem;" disabled>
-                    ULYSSE
-                </button>
-            </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-primary fw-bold"
-                style="--bs-btn-padding-y: 8.25rem; --bs-btn-padding-x: 8.728rem; --bs-btn-font-size: 3rem;" disabled>
-                    URBAIN
-                </button>
-            </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-primary fw-bold"
-                style="--bs-btn-padding-y: 8.25rem; --bs-btn-padding-x: 10.025rem; --bs-btn-font-size: 3rem;" disabled>
-                    URIDE
-                </button>
-            </div>
+        <div class="col-3">
+            <button type="button" class="btn btn-primary custom-btn w-100" disabled>UGO</button>
+        </div>
+        <div class="col-3">
+            <button type="button" class="btn btn-primary custom-btn w-100" disabled>URIELLE</button>
+        </div>
+    </div>
+    <br>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-3">
+            <button type="button" class="btn btn-primary custom-btn w-100" disabled>ULYSSE</button>
+        </div>
+        <div class="col-3">
+            <button type="button" class="btn btn-primary custom-btn w-100" disabled>URBAIN</button>
+        </div>
+        <div class="col-3">
+            <button type="button" class="btn btn-primary custom-btn w-100" disabled>URIDE</button>
         </div>
     </div>
 </div>
