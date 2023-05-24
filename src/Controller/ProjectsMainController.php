@@ -49,6 +49,7 @@ class ProjectsMainController extends AbstractController
         $countSnippets = $snippetsRepository->countBySnippet($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
+        $userProjects = $projectsRepository->findByUserId($userId); // Récupère les projets de l'utilisateur
 
         $project = new Projects();
         $form = $this->createForm(CreateProjectType::class, $project);
@@ -68,6 +69,7 @@ class ProjectsMainController extends AbstractController
             'snippets' => $countSnippets,
             'truncated' => $countTrunc,
             'suggestions' => $countSuggestions,
+            'userProjects' => $userProjects,
             'projectForm' => $form->createView(),
         ]);
     }

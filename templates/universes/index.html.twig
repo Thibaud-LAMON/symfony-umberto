@@ -3,18 +3,40 @@
 {% block title %}Hello UniversesController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="row">
+    <div class="col-2">
+        {% include "_partials/_sidenav/_app_able.html.twig" %}
+    </div>
+    <div class="col-10">
+        {% include "_partials/_numbers.html.twig" %}
+        <div class="container col-8">
+            <div class="row">
+                <div class="col">
+                    <h1>Univers création</h1>
+                    {{ form_start(universeForm) }}
+                        {{ form_row(universeForm.name) }}
+                        {#{{ form_row(universeForm.project)}}#}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/thibl/OneDrive/Bureau/milieu professionnel/alternance pareto-success/symfony-umberto/src/Controller/UniversesController.php'|file_link(0) }}">src/Controller/UniversesController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/thibl/OneDrive/Bureau/milieu professionnel/alternance pareto-success/symfony-umberto/templates/universes/index.html.twig'|file_link(0) }}">templates/universes/index.html.twig</a></code></li>
-    </ul>
+                        <button type="submit" class="btn btn-primary btn-lg my-3">Créer</button>
+                    {{ form_end(universeForm) }}
+                    <br>
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Univers existants</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                            {% for universe in univTab %}
+                                <tr>
+                                    <td>{{ universe.name }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
