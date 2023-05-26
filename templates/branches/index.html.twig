@@ -12,26 +12,26 @@
         <div class="container col-8">
             <div class="row">
                 <div class="col">
-                    <h1>Univers création</h1>
-                    {{ form_start(universeForm) }}
-                        {{ form_row(universeForm.name) }}
+                    <h1>Branche création</h1>
+                    {{ form_start(branchForm) }}
+                        {{ form_row(branchForm.name) }}
                         {#{{ form_row(universeForm.project)}}#}
 
                         <button type="submit" class="btn btn-primary btn-lg my-3">Créer</button>
-                    {{ form_end(universeForm) }}
+                    {{ form_end(branchForm) }}
                     <br>
                     <table class="table table-hover table-bordered">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col">Univers existants</th>
+                                <th scope="col">Branches existantes</th>
                             </tr>
                         </thead>
                             <tbody>
-                            {% for universe in univTab %}
+                            {% for branch in branchTab %}
                                 <tr>
                                     <td>
-                                        <a href="{{ path('app_branches', { 'projectId': projectId, 'universeId': universe.id }) }}" class="text-decoration-none" style="color: black;">
-                                            {{ universe.name }}
+                                        <a href="{{ path('app_main') }}" class="text-decoration-none" style="color: black;">
+                                            {{ branch.name }}
                                         </a>
                                     </td>
                                 </tr>

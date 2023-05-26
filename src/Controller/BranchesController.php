@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Branches;
 use App\Entity\Universes;
-use App\Entity\Projects;
 use App\Entity\Users;
-use App\Form\CreateUniverseType;
+use App\Form\CreateBrancheType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,12 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ProjectsRepository;
 use App\Repository\SnippetsRepository;
 use App\Repository\SuggestionsRepository;
-use App\Repository\UniversesRepository;
+use App\Repository\BranchesRepository;
 
-class UniversesController extends AbstractController
+class BranchesController extends AbstractController
 {
-    #[Route('/project/{projectId}/universes', name: 'app_universes')]
-    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, UniversesRepository $universesRepository, Request $request, EntityManagerInterface $entityManager, int $projectId): Response
+    #[Route('/project/{projectId}/universes/{universeId}/branches', name: 'app_branches')]
+    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, BranchesRepository $branchesRepository, Request $request, EntityManagerInterface $entityManager, int $projectId, int $universeId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -30,38 +30,37 @@ class UniversesController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-        $project = $entityManager->getRepository(Projects::class)->find($projectId);
+        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
 
-        if (!$project) {
-            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+        if (!$universe) {
+            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
         }
 
-        $displayUniv = $universesRepository->findByProjectId($projectId);
+        $displayBranches = $branchesRepository->findByUniverseId($universeId);
 
-        $universe = new Universes();
-        $universe->setProjects($project);
-        $form = $this->createForm(CreateUniverseType::class, $universe);
+        $branch = new Branches();
+        $branch->setUniverses($universe);
+        $form = $this->createForm(CreateBrancheType::class, $branch);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $entityManager->persist($universe);
+            $entityManager->persist($branch);
             $entityManager->flush();
 
             $this->addFlash('success', 'L\'univers a été créé avec succès.');
 
-            return $this->redirectToRoute('app_universes');
+            return $this->redirectToRoute('app_branches', ['projectId' => $projectId, 'universeId' => $universeId]);
         }
 
-        return $this->render('universes/index.html.twig', [
-            'controller_name' => 'UniversesController',
+        return $this->render('branches/index.html.twig', [
+            'controller_name' => 'BranchesController',
             'projects' => $countProjects,
             'snippets' => $countSnippets,
             'truncated' => $countTrunc,
             'suggestions' => $countSuggestions,
-            'univTab' => $displayUniv,
-            'universeForm' => $form->createView(),
-            'projectId' => $projectId, // Passe projectId à la vue
+            'branchTab' => $displayBranches,
+            'branchForm' => $form->createView(),
         ]);
     }
 }

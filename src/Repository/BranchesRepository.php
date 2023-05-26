@@ -39,28 +39,47 @@ class BranchesRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Branches[] Returns an array of Branches objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByUniverseId($universeId)
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.universes = :universes_id')
+            ->setParameter('universes_id', $universeId)
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Branches
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByProjectId($projectId)
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.universes', 'u') // Rejoint sur Universe
+            ->innerJoin('u.projects', 'p') // Rejoint sur Project depuis Universe
+            ->where('p.id = :projectId')
+            ->setParameter('projectId', $projectId)
+            ->getQuery()
+            ->getResult();
+    }
+    //    /**
+    //     * @return Branches[] Returns an array of Branches objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('b')
+    //            ->andWhere('b.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('b.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Branches
+    //    {
+    //        return $this->createQueryBuilder('b')
+    //            ->andWhere('b.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
