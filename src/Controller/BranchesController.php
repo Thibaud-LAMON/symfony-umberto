@@ -48,7 +48,7 @@ class BranchesController extends AbstractController
             $entityManager->persist($branch);
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\'univers a été créé avec succès.');
+            $this->addFlash('success', 'La branche a été créée avec succès.');
 
             return $this->redirectToRoute('app_branches', ['projectId' => $projectId, 'universeId' => $universeId]);
         }
@@ -61,6 +61,8 @@ class BranchesController extends AbstractController
             'suggestions' => $countSuggestions,
             'branchTab' => $displayBranches,
             'branchForm' => $form->createView(),
+            'projectId' => $projectId, // Passe projectId à la vue
+            'universeId' => $universeId, // Passe universeId à la vue
         ]);
     }
 }

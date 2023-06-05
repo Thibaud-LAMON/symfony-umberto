@@ -20,13 +20,13 @@ class CreateBrancheType extends AbstractType
                 'label' => 'Nom de la branche',
                 'required' => true,
                 /*             ])
-            ->add('project', EntityType::class, [
+            ->add('universe', EntityType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'class' => Projects::class,
+                'class' => Universes::class,
                 'choice_label' => 'name',
-                'label' => 'Liaison avec le projet :',
+                'label' => 'Liaison avec l'univers :',
                 'required' => true, */
             ]);
     }

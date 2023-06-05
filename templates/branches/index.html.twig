@@ -30,7 +30,7 @@
                             {% for branch in branchTab %}
                                 <tr>
                                     <td>
-                                        <a href="{{ path('app_main') }}" class="text-decoration-none" style="color: black;">
+                                        <a href="{{ path('app_ideas',{ 'projectId': projectId, 'universeId': universeId, 'branchId': branch.id }) }}" class="text-decoration-none" style="color: black;">
                                             {{ branch.name }}
                                         </a>
                                     </td>
