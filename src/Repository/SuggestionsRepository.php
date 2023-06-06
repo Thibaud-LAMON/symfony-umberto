@@ -54,6 +54,17 @@ class SuggestionsRepository extends ServiceEntityRepository
             ->getSingleScalarResult(); //éxecute la requête
     }
 
+    public function suggestionExistsForIdea($suggestion, $ideaId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.suggestion = :suggestion')
+            ->andWhere('s.ideas = :ideas_id')
+            ->setParameter('suggestion', $suggestion)
+            ->setParameter('ideas_id', $ideaId)
+            ->getQuery()
+            ->getOneOrNullResult() !== null;
+    }
+
     //    /**
     //     * @return Suggestions[] Returns an array of Suggestions objects
     //     */

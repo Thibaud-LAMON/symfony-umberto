@@ -70,6 +70,17 @@ class SnippetsRepository extends ServiceEntityRepository
             ->getSingleScalarResult(); //éxecute la requête
     }
 
+    public function snippetExistsForIdea($snippetText, $ideaId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.snippet = :snippet')
+            ->andWhere('s.ideas = :ideas_id')
+            ->setParameter('snippet', $snippetText)
+            ->setParameter('ideas_id', $ideaId)
+            ->getQuery()
+            ->getOneOrNullResult() !== null;
+    }
+
     //    /**
     //     * @return Snippets[] Returns an array of Snippets objects
     //     */

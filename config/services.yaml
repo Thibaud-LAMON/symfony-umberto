@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    SCALE_SERP_API_KEY: '2D930585E8974F07A2F7F331524C1AEC'
 
 services:
     # default configuration for services in *this* file

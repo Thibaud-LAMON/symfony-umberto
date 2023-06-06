@@ -12,27 +12,21 @@
         <div class="container col-8">
             <div class="row">
                 <div class="col">
-                    <h1>Idée création</h1>
-                    {{ form_start(ideaForm) }}
-                        {{ form_row(ideaForm.name) }}
-                        {#{{ form_row(universeForm.project)}}#}
-
-                        <button type="submit" class="btn btn-primary btn-lg my-3">Créer</button>
-                    {{ form_end(ideaForm) }}
-                    <br>
                     <table class="table table-hover table-bordered">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col">Idées existantes</th>
+                                <th scope="col">Amorces</th>
+                                <th scope="col">Sugettions</th>
                             </tr>
                         </thead>
                         <tbody>
-                        {% for idea in ideaTab %}
+                        {% for result in results %}
                             <tr>
                                 <td>
-                                    <a href="{{ path('app_ideas_generate',{ 'projectId': projectId, 'universeId': universeId, 'branchId': branchId, 'ideaId': idea.id }) }}" class="text-decoration-none" style="color: black;">
-                                        {{ idea.name }}
-                                    </a>
+                                    {{ result.snippet }}
+                                </td>
+                                <td>
+                                    {{ result.suggestion }}
                                 </td>
                             </tr>
                         {% endfor %}
