@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IdeasController!{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-2">
+        {% include "_partials/_sidenav/_app_able.html.twig" %}
+    </div>
+    <div class="col-10">
+        {% include "_partials/_numbers.html.twig" %}
+        <div class="container col-8">
+            <div class="row">
+                <div class="col">
+                    <h1>Idée création</h1>
+                    {{ form_start(ideaForm) }}
+                        {{ form_row(ideaForm.name) }}
+                        {#{{ form_row(universeForm.project)}}#}
+
+                        <button type="submit" class="btn btn-primary btn-lg my-3">Créer</button>
+                    {{ form_end(ideaForm) }}
+                    <br>
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Idées existantes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for idea in ideaTab %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('app_ideas_generate',{ 'projectId': projectId, 'universeId': universeId, 'branchId': branchId, 'ideaId': idea.id }) }}" class="text-decoration-none" style="color: black;">
+                                        {{ idea.name }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

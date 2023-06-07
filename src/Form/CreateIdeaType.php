@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Branches;
+use App\Entity\Ideas;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class CreateBrancheType extends AbstractType
+class CreateIdeaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -17,16 +17,16 @@ class CreateBrancheType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'label' => 'Nom de la branche',
+                'label' => 'Nom de l\'idée',
                 'required' => true,
                 /*             ])
-            ->add('universe', EntityType::class, [
+            ->add('branche', EntityType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'class' => Universes::class,
+                'class' => Branches::class,
                 'choice_label' => 'name',
-                'label' => 'Liaison avec l'univers :',
+                'label' => 'Liaison avec la branche :',
                 'required' => true, */
             ]);
     }
@@ -34,7 +34,7 @@ class CreateBrancheType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Branches::class,
+            'data_class' => Ideas::class,
         ]);
     }
 }

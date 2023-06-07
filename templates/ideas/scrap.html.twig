@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IdeasController!{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-2">
+        {% include "_partials/_sidenav/_app_able.html.twig" %}
+    </div>
+    <div class="col-10">
+        {% include "_partials/_numbers.html.twig" %}
+        <div class="container col-8">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Amorces</th>
+                                <th scope="col">Sugettions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for result in results %}
+                            <tr>
+                                <td>
+                                    {{ result.snippet }}
+                                </td>
+                                <td>
+                                    {{ result.suggestion }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

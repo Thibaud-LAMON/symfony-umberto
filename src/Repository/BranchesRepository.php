@@ -51,8 +51,8 @@ class BranchesRepository extends ServiceEntityRepository
     public function findByProjectId($projectId)
     {
         return $this->createQueryBuilder('b')
-            ->innerJoin('b.universes', 'u') // Rejoint sur Universe
-            ->innerJoin('u.projects', 'p') // Rejoint sur Project depuis Universe
+            ->innerJoin('b.universes', 'u') // Rejoint sur Universes
+            ->innerJoin('u.projects', 'p') // Rejoint sur Projects depuis Universes
             ->where('p.id = :projectId')
             ->setParameter('projectId', $projectId)
             ->getQuery()
