@@ -28,10 +28,14 @@ class Ideas
     #[ORM\OneToMany(mappedBy: 'ideas', targetEntity: Snippets::class)]
     private Collection $snippets;
 
+    #[ORM\OneToMany(mappedBy: 'ideas', targetEntity: Synonyms::class, orphanRemoval: true)]
+    private Collection $synonyms;
+
     public function __construct()
     {
         $this->suggestions = new ArrayCollection();
         $this->snippets = new ArrayCollection();
+        $this->synonyms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +121,36 @@ class Ideas
             // set the owning side to null (unless already changed)
             if ($snippet->getIdeas() === $this) {
                 $snippet->setIdeas(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Synonyms>
+     */
+    public function getSynonyms(): Collection
+    {
+        return $this->synonyms;
+    }
+
+    public function addSynonym(Synonyms $synonym): self
+    {
+        if (!$this->synonyms->contains($synonym)) {
+            $this->synonyms->add($synonym);
+            $synonym->setIdeas($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSynonym(Synonyms $synonym): self
+    {
+        if ($this->synonyms->removeElement($synonym)) {
+            // set the owning side to null (unless already changed)
+            if ($synonym->getIdeas() === $this) {
+                $synonym->setIdeas(null);
             }
         }
 

@@ -6,6 +6,7 @@ use App\Entity\Snippets;
 use App\Entity\Suggestions;
 use App\Entity\Ideas;
 use App\Entity\Branches;
+use App\Entity\Synonyms;
 use App\Entity\Users;
 use App\Form\CreateIdeaType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ProjectsRepository;
 use App\Repository\SnippetsRepository;
 use App\Repository\SuggestionsRepository;
+use App\Repository\SynonymsRepository;
 use App\Repository\IdeasRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -139,8 +141,49 @@ class IdeasController extends AbstractController
         return $output;
     }
 
+    public function replace_content_inside_delimiters($start, $end, $new, $Ligne)
+    {
+        return preg_replace('#(' . preg_quote($start) . ')(.*)(' . preg_quote($end) . ')#si', '$1' . $new . '$3', $Ligne);
+    }
+
+    public function synonyms($motCle)
+    {
+        $motCle = str_replace(" ", "+", $motCle);
+        $urlRecherche = "https://crisco4.unicaen.fr/des/synonymes/" . $motCle;
+
+        $code_html = file_get_contents($urlRecherche);
+
+        $start = "<!DOCTYPE";
+        $end = '<div id="cliques">';
+        $new = "";
+
+        $nettoyage = $this->replace_content_inside_delimiters($start, $end, $new, $code_html);
+
+        $start = '<div id="mention">';
+        $end = '</html>';
+        $new = "";
+
+        $nettoyage = $this->replace_content_inside_delimiters($start, $end, $new, $nettoyage);
+
+        $synoList = explode('<li>', $nettoyage);
+
+        $synoStock = array();
+        $p = 0;
+
+        for ($i = 0; $i < sizeof($synoList); $i++) {
+            if ($i != 0) {
+
+                $rawText = strip_tags($synoList[$i]);
+
+                $synoStock[$p] = $rawText;
+                $p++;
+            }
+        }
+        return $synoStock;
+    }
+
     #[Route('project/{projectId}/universes/{universeId}/branches/{branchId}/ideas/{ideaId}', name: 'app_ideas_generate')]
-    public function generate(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, IdeasRepository $ideasRepository, Request $request, EntityManagerInterface $entityManager, int $projectId, int $universeId, int $branchId, int $ideaId): Response
+    public function generate(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, SynonymsRepository $synonymsRepository, IdeasRepository $ideasRepository, EntityManagerInterface $entityManager, int $projectId, int $universeId, int $branchId, int $ideaId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -182,15 +225,30 @@ class IdeasController extends AbstractController
             }
         }
 
+        $synonyms = $this->synonyms($ideaName); // Récupérer les synonymes
+
+        foreach ($synonyms as $synonym) {
+            if (!$synonymsRepository->synonymExistsForIdea($synonym, $ideaId)) { // vérifie si la synonym existe
+                $syn = new Synonyms(); // créez une nouvelle instance de Suggestion
+                $syn->setSynonym($synonym); // définit le texte de la synonym
+                $syn->setIdeas($idea); // lie la synonym à l'objet Idea
+
+                $entityManager->persist($syn); // prépare la synonym pour la sauvegarde
+            }
+        }
+
         $entityManager->flush(); // sauvegarde toutes les suggestions dans la base de données
 
         $results = [];
 
-        for ($i = 0; $i < count($apiSnippets); $i++) {
-            $snippet = $apiSnippets[$i];
-            $suggestion = $i < count($apiSuggests) ? $apiSuggests[$i] : Null; // valeur par défaut
+        $max_length = max(count($apiSnippets), count($apiSuggests), count($synonyms));
 
-            $results[] = ['snippet' => $snippet, 'suggestion' => $suggestion];
+        for ($i = 0; $i < $max_length; $i++) {
+            $snippet = $i < count($apiSnippets) ? $apiSnippets[$i] : Null; // valeur par défaut
+            $suggestion = $i < count($apiSuggests) ? $apiSuggests[$i] : Null; // valeur par défaut
+            $synonym = $i < count($synonyms) ? $synonyms[$i] : Null; // valeur par défaut
+
+            $results[] = ['snippet' => $snippet, 'suggestion' => $suggestion, 'synonym' => $synonym];
         }
 
         return $this->render('ideas/scrap.html.twig', [

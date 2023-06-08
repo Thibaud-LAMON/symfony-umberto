@@ -17,6 +17,7 @@
                             <tr>
                                 <th scope="col">Amorces</th>
                                 <th scope="col">Sugettions</th>
+                                <th scope="col">Synonymes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -27,6 +28,9 @@
                                 </td>
                                 <td>
                                     {{ result.suggestion }}
+                                </td>
+                                <td>
+                                    {{ result.synonym }}
                                 </td>
                             </tr>
                         {% endfor %}
