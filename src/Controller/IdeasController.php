@@ -91,7 +91,7 @@ class IdeasController extends AbstractController
             'gl' => 'fr',
             'hl' => 'fr',
             'device' => 'desktop',
-            'num' => '15',
+            'num' => '5',
             'csv_fields' => 'organic_results.snippet'
         ]);
 
@@ -193,8 +193,6 @@ class IdeasController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-
-
         $idea = $ideasRepository->find($ideaId);
         if (!$idea) {
             throw new EntityNotFoundException('Idea with ID "' . $ideaId . '" does not exist.');
@@ -237,7 +235,12 @@ class IdeasController extends AbstractController
             }
         }
 
+
         $entityManager->flush(); // sauvegarde toutes les suggestions dans la base de données
+
+        $snippetsRepository->deleteSpecificSnippets('');
+        $snippetsRepository->deleteSpecificSnippets('organic_results.snippet');
+        $suggestionsRepository->deleteSpecificSuggestions('related_searches.query');
 
         $results = [];
 

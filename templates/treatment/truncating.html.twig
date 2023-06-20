@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-2">
+        {% include "_partials/_sidenav/_app_able.html.twig" %}
+    </div>
+    <div class="col-10">
+        {% include "_partials/_numbers.html.twig" %}
+        <div class="container col-8">
+            <div class="row">
+                <div class="col">
+                    <h3>Si vous souhaitez envoyer une sous-chaine, cliquez sur un caractère sinon cliquez sur suivant.</h3>
+                    <br>
+                    {% if not snippet is null %}
+                        {% for i in 0..letters|length - 1 %}
+                            <button data-sub-string="{{ subStrings[i] }}" class="char border border-0 p-0 ">{{ letters[i] }}</button>
+                        {% endfor %}
+                        <br><br>
+                        <div id="result"></div>
+                        <br>
+                        {{ form_start(form) }}
+                            {{ form_row(form.truncated) }}
+                            <button type="submit" class="btn btn-primary btn-lg my-3">Suivant</button>
+                        {{ form_end(form) }}
+                    {% else %}
+                        <p>Tous les snippet sont traités</p>
+                    {% endif %}
+                    <script>
+                        var buttons = document.getElementsByClassName("char");
+                        var inputField = document.getElementById("truncation_truncated");
+                        
+                        for (var i = 0; i < buttons.length; i++) {
+                            buttons[i].addEventListener("click", function(event) {
+                                var subString = event.target.dataset.subString;
+                                inputField.value = subString;
+                            });
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

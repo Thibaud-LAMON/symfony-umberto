@@ -50,6 +50,15 @@ class SynonymsRepository extends ServiceEntityRepository
             ->getOneOrNullResult() !== null;
     }
 
+    public function findAllByIdea($ideaId)
+    {
+        return $this->createQueryBuilder('s')  // 's' est un alias pour 'synonyms'
+            ->andWhere('s.ideas = :ideas_id')  // Filtre par l'idée spécifiée
+            ->setParameter('ideas_id', $ideaId)  // Définit la valeur pour :ideaId
+            ->getQuery()  // Obtient la requête
+            ->getResult();  // Exécute la requête et obtient les résultats
+    }
+
     //    /**
     //     * @return Synonyms[] Returns an array of Synonyms objects
     //     */

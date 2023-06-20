@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Traitement - Choisissez un projet{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-2">
+        <ul class="list-unstyled px-2 text-center border-end shadow nav nav-pills flex-column mb-auto" style="min-height:100vh">
+    <br>
+    <li><a href="{{ path('app_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Revenir au menu principal</button></a></li>
+    <br>
+    <li><a href="{{ path('app_projects_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Projets</button></a></li>
+    <br>
+    <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Univers sémantiques</button></a></li>
+    <br>
+    <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Branches sémantiques</button></a></li>
+    <br>
+    <li><a href="#" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Idées</button></a></li>
+    <br>
+    <li><a href="{{ path('app_treatment_first') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Traitement</button></a></li>
+</ul>
+    </div>
+    <div class="col-10">
+        {% include "_partials/_numbers.html.twig" %}
+        <div class="container col-8">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Choisissez un projet</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in userProjects %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ path('app_treatment_second', { 'projectId': project.id}) }}" class="text-decoration-none" style="color: black;">
+                                                {{ project.name }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

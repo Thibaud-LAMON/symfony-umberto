@@ -71,6 +71,15 @@ class IdeasRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findIdeaById($ideaId)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.id = :ideaId')
+            ->setParameter('ideaId', $ideaId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Ideas[] Returns an array of Ideas objects
     //     */

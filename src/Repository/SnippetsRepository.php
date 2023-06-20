@@ -81,6 +81,46 @@ class SnippetsRepository extends ServiceEntityRepository
             ->getOneOrNullResult() !== null;
     }
 
+    public function findOneByIdeaIdAndTruncatedIsNull($ideaId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.idea = :idea')
+            ->andWhere('s.truncated IS NULL')
+            ->setParameter('idea', $ideaId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findAllTruncatedByIdea($ideaId)
+    {
+        return $this->createQueryBuilder('s')  // 's' est un alias pour 'snippets'
+            ->andWhere('s.ideas = :ideas_id')  // Filtre par l'idée spécifiée
+            ->andWhere('s.truncated IS NOT NULL')  // Filtre pour les snippets tronqués uniquement
+            ->setParameter('ideas_id', $ideaId)  // Définit la valeur pour :ideaId
+            ->getQuery()  // Obtient la requête
+            ->getResult();  // Exécute la requête et obtient les résultats
+    }
+
+    public function deleteEmptySnippets()
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->delete()
+            ->where($qb->expr()->eq('s.snippet', ':empty'))
+            ->setParameter('empty', '')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function deleteSpecificSnippets($text)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->delete()
+            ->where($qb->expr()->eq('s.snippet', ':text'))
+            ->setParameter('text', $text)
+            ->getQuery()
+            ->execute();
+    }
+
     //    /**
     //     * @return Snippets[] Returns an array of Snippets objects
     //     */

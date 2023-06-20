@@ -41,7 +41,7 @@ class SuggestionsRepository extends ServiceEntityRepository
 
     public function countBySuggestion(int $userId): int
     {
-        $qb = $this->createQueryBuilder('s'); //créer un objet QueryBuilder avec un alias pour l'entité Snippets
+        $qb = $this->createQueryBuilder('s'); //créer un objet QueryBuilder avec un alias pour l'entité Suggestions
 
         return $qb->select('count(s.suggestion)') //selectionne le nombre de suggestions dans l'entité
             ->join('App\Entity\Ideas', 'i', 'WITH', 's MEMBER OF i.suggestions') //Jointure avec l'entité Ideas (i) Suggestion est liée à Ideas via la clé secondaire ideas_id.
@@ -63,6 +63,25 @@ class SuggestionsRepository extends ServiceEntityRepository
             ->setParameter('ideas_id', $ideaId)
             ->getQuery()
             ->getOneOrNullResult() !== null;
+    }
+
+    public function deleteSpecificSuggestions($text)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->delete()
+            ->where($qb->expr()->eq('s.suggestion', ':text'))
+            ->setParameter('text', $text)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function findAllByIdea($ideaId)
+    {
+        return $this->createQueryBuilder('s')  // 's' est un alias pour 'suggestions'
+            ->andWhere('s.ideas = :ideas_id')  // Filtre par l'idée spécifiée
+            ->setParameter('ideas_id', $ideaId)  // Définit la valeur pour :ideaId
+            ->getQuery()  // Obtient la requête
+            ->getResult();  // Exécute la requête et obtient les résultats
     }
 
     //    /**
