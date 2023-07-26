@@ -5,7 +5,7 @@
 {% block body %}
 <section class="container my-3">
     <div class="row">
-        <div class="col">
+        <div class="col col-5 position-absolute top-50 start-50 translate-middle border border-dark rounded-3 p-3">
             <form method="post">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
