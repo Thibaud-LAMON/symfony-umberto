@@ -1,4 +1,13 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+{% block styles %}
+    <style>
+        .navbar-custom {
+            background-color: #07435F !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ path('app_main')}}">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
@@ -25,3 +34,4 @@
             </div>
         </div>
     </nav>
+{% endblock %}
