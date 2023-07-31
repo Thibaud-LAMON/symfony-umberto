@@ -26,8 +26,11 @@
                             {{ form_row(formEdit.email) }}
                             {{ form_row(formEdit.username) }}
 
-                            <button type="submit" class="btn btn-primary btn-lg btn-color my-3">Modifier</button>
+                            <button type="submit" class="btn btn-primary btn-lg btn-color mt-4 ">Modifier</button>
                         {{ form_end(formEdit) }}
+                        <a href="{{ path('app_logout') }}"  class="position-absolute bottom-0 end-0 me-3">
+                            <button class="btn btn-primary btn-lg btn-color my-3">Déconnexion</button>
+                        </a>
                     </div>
                 </div>
             </section>

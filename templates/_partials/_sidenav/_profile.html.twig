@@ -1,8 +1,24 @@
+{% block styles %}
+    <style>
+        .button-custom {
+            border: 1px solid #07435F;
+            color: #07435F;
+            font-size: 1rem;
+            width: 15rem;
+            height: 4rem;
+        }
+        .button-custom:hover{
+            background-color: #07435F;
+            color: #FFFFFF;
+        }
+    </style>
+{% endblock %}
+
 <ul class="list-unstyled px-2 text-center border-end shadow nav nav-pills flex-column mb-auto" style="height:100vh">
     <br>
-    <li><a href="{{ path('app_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Revenir au menu principal</button></a></li>
+    <li><a href="{{ path('app_main') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary button-custom"><i class="fa-solid fa-arrow-left"></i>   Revenir au menu principal</button></a></li>
     <br>
-    <li><a href="{{ path('app_profil_edit') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Profil</button></a></li>
+    <li><a href="{{ path('app_profil_edit') }}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary button-custom">Profil</button></a></li>
     <br>
-    <li><a href="{{ path('app_profil_password')}}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary">Mot de passe</button></a></li>
+    <li><a href="{{ path('app_profil_password')}}" class="text-decoration-none"><button href="#" class="btn btn-outline-secondary button-custom">Mot de passe</button></a></li>
 </ul>
