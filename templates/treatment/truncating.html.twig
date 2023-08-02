@@ -10,6 +10,7 @@
         <div class="container col-8">
             <div class="row">
                 <div class="col">
+                    {{ wo_render_breadcrumbs({separator: '>', listId: 'breadcrumbs'}) }}
                     <h3>Si vous souhaitez envoyer une sous-chaine, cliquez sur un caractère sinon cliquez sur suivant.</h3>
                     <br>
                     {% if not snippet is null %}

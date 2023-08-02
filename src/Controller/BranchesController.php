@@ -6,6 +6,7 @@ use App\Entity\Branches;
 use App\Entity\Universes;
 use App\Entity\Users;
 use App\Form\CreateBrancheType;
+use App\Entity\Projects;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,11 +17,12 @@ use App\Repository\ProjectsRepository;
 use App\Repository\SnippetsRepository;
 use App\Repository\SuggestionsRepository;
 use App\Repository\BranchesRepository;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class BranchesController extends AbstractController
 {
     #[Route('/project/{projectId}/universes/{universeId}/branches', name: 'app_branches')]
-    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, BranchesRepository $branchesRepository, Request $request, EntityManagerInterface $entityManager, int $projectId, int $universeId): Response
+    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, BranchesRepository $branchesRepository, Request $request, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId, int $universeId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -30,11 +32,20 @@ class BranchesController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
+        $project = $entityManager->getRepository(Projects::class)->find($projectId);
         $universe = $entityManager->getRepository(Universes::class)->find($universeId);
+
+        if (!$project) {
+            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+        }
 
         if (!$universe) {
             throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
         }
+
+        // Ajout des éléments de fil d'Ariane
+        $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_projects_main', ['projectId' => $projectId]));
+        $breadcrumbs->addItem($universe->getName());
 
         $displayBranches = $branchesRepository->findByUniverseId($universeId);
 

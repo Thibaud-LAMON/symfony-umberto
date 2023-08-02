@@ -9,3 +9,8 @@
     background-color: #07435F !important;
     border: #07435F;
 }
+
+.breadcrumb a {
+    text-decoration: none;
+    /* Supprime la ligne sous le lien */
+}

@@ -12,6 +12,7 @@
         <div class="container col-8">
             <div class="row">
                 <div class="col">
+                    {{ wo_render_breadcrumbs({separator: '>', listId: 'breadcrumbs'}) }}
                     <h1>Branche création</h1>
                     {{ form_start(branchForm) }}
                         {{ form_row(branchForm.name) }}

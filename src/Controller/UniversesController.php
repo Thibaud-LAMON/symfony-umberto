@@ -16,11 +16,12 @@ use App\Repository\ProjectsRepository;
 use App\Repository\SnippetsRepository;
 use App\Repository\SuggestionsRepository;
 use App\Repository\UniversesRepository;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class UniversesController extends AbstractController
 {
     #[Route('/project/{projectId}/universes', name: 'app_universes')]
-    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, UniversesRepository $universesRepository, Request $request, EntityManagerInterface $entityManager, int $projectId): Response
+    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, UniversesRepository $universesRepository, Request $request, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -35,6 +36,9 @@ class UniversesController extends AbstractController
         if (!$project) {
             throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
         }
+
+        // Ajout des éléments de fil d'Ariane
+        $breadcrumbs->addItem($project->getName()); // Remplacez ceci par le nom réel de la page
 
         $displayUniv = $universesRepository->findByProjectId($projectId);
 

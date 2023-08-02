@@ -12,6 +12,7 @@
         <div class="container col-8">
             <div class="row">
                 <div class="col">
+                    {{ wo_render_breadcrumbs({separator: '>', listId: 'breadcrumbs'}) }}
                     <h1>Univers création</h1>
                     {{ form_start(universeForm) }}
                         {{ form_row(universeForm.name) }}
