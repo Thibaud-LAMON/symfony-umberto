@@ -13,7 +13,7 @@
             <h1>Projets</h1>
             <div class="row">
                 <div class="col-3">
-                    <a href="{{ path('app_projects_create') }}" class="text-decoration-none"><button type="button" class="btn btn-primary fw-bold"
+                    <a href="{{ path('app_projects_create') }}" class="text-decoration-none"><button type="button" class="btn btn-primary btn-color fw-bold"
                     style="width : 14rem; height : 14rem;  --bs-btn-font-size: 3rem;">
                         <i class="fas fa-solid fa-circle-plus fa-lg"></i>
                     </button></a>
@@ -21,7 +21,7 @@
                 {# Loop over the projects #}
                 {% for project in userProjects %}
                     <div class="col-3">
-                        <a href="{{ path('app_universes', {'projectId': project.id}) }}" class="text-decoration-none"><button type="button" class="btn btn-primary fw-bold"
+                        <a href="{{ path('app_universes', {'projectId': project.id}) }}" class="text-decoration-none"><button type="button" class="btn btn-primary btn-color fw-bold"
                         style="width : 14rem; height : 14rem;  --bs-btn-font-size: 2rem;">
                             {{ project.name }} {# Display the project name on the button #}
                         </button></a>

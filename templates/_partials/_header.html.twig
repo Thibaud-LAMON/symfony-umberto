@@ -1,4 +1,13 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+{% block styles %}
+    <style>
+        .navbar-custom {
+            background-color: #07435F !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ path('app_main')}}">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
@@ -8,10 +17,7 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if app.user%}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_profil_edit') }}">Mon compte</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_logout') }}">Me déconnecter</a>
+                            <a class="nav-link" href="{{ path('app_profil_edit') }}"><i class="fa-solid fa-circle-user fa-2xl"></i></a>
                         </li>
                     {% else %}
                         <li class="nav-item">
@@ -25,3 +31,4 @@
             </div>
         </div>
     </nav>
+{% endblock %}

@@ -1,0 +1,11 @@
+.custom-btn {
+    padding-top: 8.25rem;
+    padding-bottom: 8.25rem;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.btn-color {
+    background-color: #07435F !important;
+    border: #07435F;
+}
