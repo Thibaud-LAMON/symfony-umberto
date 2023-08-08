@@ -6,6 +6,7 @@ use App\Entity\Branches;
 use App\Entity\Universes;
 use App\Entity\Projects;
 use App\Entity\Users;
+use App\Entity\Ideas;
 use App\Form\TruncationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
@@ -20,11 +21,12 @@ use App\Repository\BranchesRepository;
 use App\Repository\IdeasRepository;
 use App\Repository\SynonymsRepository;
 use Symfony\Component\HttpFoundation\Request;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class TreatmentController extends AbstractController
 {
     #[Route('/treatment/projects', name: 'app_treatment_first')]
-    public function project_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository): Response
+    public function project_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, Breadcrumbs $breadcrumbs, SuggestionsRepository $suggestionsRepository): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -34,6 +36,8 @@ class TreatmentController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $userProjects = $projectsRepository->findByUserId($userId); // Récupère les projets de l'utilisateur
+
+        $breadcrumbs->addItem("Traitement");
 
         return $this->render('treatment/project.html.twig', [
             'controller_name' => 'TreatmentController',
@@ -46,7 +50,7 @@ class TreatmentController extends AbstractController
     }
 
     #[Route('/treatment/project/{projectId}/universes', name: 'app_treatment_second')]
-    public function universes_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, UniversesRepository $universesRepository, EntityManagerInterface $entityManager, int $projectId): Response
+    public function universes_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, UniversesRepository $universesRepository, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -62,6 +66,9 @@ class TreatmentController extends AbstractController
             throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
         }
 
+        $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
+        $breadcrumbs->addItem($project->getName());
+
         $displayUniv = $universesRepository->findByProjectId($projectId);
 
         return $this->render('treatment/univ.html.twig', [
@@ -76,7 +83,7 @@ class TreatmentController extends AbstractController
     }
 
     #[Route('/treatment/project/{projectId}/universe/{universeId}/branches', name: 'app_treatment_third')]
-    public function branches_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, BranchesRepository $branchesRepository, EntityManagerInterface $entityManager, int $projectId, int $universeId): Response
+    public function branches_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, BranchesRepository $branchesRepository, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId, int $universeId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -86,11 +93,19 @@ class TreatmentController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
+        $project = $entityManager->getRepository(Projects::class)->find($projectId);
         $universe = $entityManager->getRepository(Universes::class)->find($universeId);
 
+        if (!$project) {
+            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+        }
         if (!$universe) {
             throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
         }
+
+        $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
+        $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_treatment_second', ['projectId' => $projectId, 'universeId' => $universeId]));
+        $breadcrumbs->addItem($universe->getName());
 
         $displayBranches = $branchesRepository->findByUniverseId($universeId);
 
@@ -107,7 +122,7 @@ class TreatmentController extends AbstractController
     }
 
     #[Route('/treatment/project/{projectId}/universe/{universeId}/branches/{branchId}/ideas', name: 'app_treatment_fourth')]
-    public function ideas_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, IdeasRepository $ideasRepository, EntityManagerInterface $entityManager, int $projectId, int $universeId, int $branchId): Response
+    public function ideas_select(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, IdeasRepository $ideasRepository, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId, int $universeId, int $branchId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -117,11 +132,23 @@ class TreatmentController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
+        $project = $entityManager->getRepository(Projects::class)->find($projectId);
+        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
         $branch = $entityManager->getRepository(Branches::class)->find($branchId);
 
         if (!$branch) {
             throw new EntityNotFoundException('Branch with ID "' . $branchId . '" does not exist.');
         }
+        if (!$project) {
+            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+        }
+        if (!$universe) {
+            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+        }
+        $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
+        $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_treatment_second', ['projectId' => $projectId, 'universeId' => $universeId]));
+        $breadcrumbs->addItem($universe->getName(), $this->generateUrl('app_treatment_third', ['projectId' => $projectId, 'universeId' => $universeId, 'branchId' => $branchId]));
+        $breadcrumbs->addItem($branch->getName());
 
         $displayIdeas = $ideasRepository->findByBranchId($branchId);
 
@@ -139,7 +166,7 @@ class TreatmentController extends AbstractController
     }
 
     #[Route('/treatment/project/{projectId}/universe/{universeId}/branches/{branchId}/ideas/{ideaId}', name: 'app_treatment_fifth')]
-    public function treatment(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, Request $request, EntityManagerInterface $entityManager, int $projectId, int $universeId, int $branchId, int $ideaId): Response
+    public function treatment(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, Request $request, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId, int $universeId, int $branchId, int $ideaId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -148,6 +175,29 @@ class TreatmentController extends AbstractController
         $countSnippets = $snippetsRepository->countBySnippet($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
+
+        $project = $entityManager->getRepository(Projects::class)->find($projectId);
+        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
+        $branch = $entityManager->getRepository(Branches::class)->find($branchId);
+        $idea = $entityManager->getRepository(Ideas::class)->find($ideaId);
+
+        if (!$branch) {
+            throw new EntityNotFoundException('Branch with ID "' . $branchId . '" does not exist.');
+        }
+        if (!$project) {
+            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+        }
+        if (!$universe) {
+            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+        }
+        if (!$idea) {
+            throw new EntityNotFoundException('Idea with ID "' . $ideaId . '" does not exist.');
+        }
+        $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
+        $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_treatment_second', ['projectId' => $projectId, 'universeId' => $universeId]));
+        $breadcrumbs->addItem($universe->getName(), $this->generateUrl('app_treatment_third', ['projectId' => $projectId, 'universeId' => $universeId, 'branchId' => $branchId]));
+        $breadcrumbs->addItem($branch->getName(), $this->generateUrl('app_treatment_fourth', ['projectId' => $projectId, 'universeId' => $universeId, 'branchId' => $branchId, 'ideaId' => $ideaId]));
+        $breadcrumbs->addItem($idea->getName());
 
         $snippetEntity = $snippetsRepository->findOneBy(['ideas' => $ideaId, 'truncated' => null]);
         if (!$snippetEntity) {

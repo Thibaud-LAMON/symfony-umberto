@@ -8,6 +8,8 @@ use App\Entity\Ideas;
 use App\Entity\Branches;
 use App\Entity\Synonyms;
 use App\Entity\Users;
+use App\Entity\Projects;
+use App\Entity\Universes;
 use App\Form\CreateIdeaType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
@@ -21,12 +23,12 @@ use App\Repository\SuggestionsRepository;
 use App\Repository\SynonymsRepository;
 use App\Repository\IdeasRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class IdeasController extends AbstractController
 {
     #[Route('project/{projectId}/universes/{universeId}/branches/{branchId}/ideas', name: 'app_ideas')]
-    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, IdeasRepository $ideasRepository, Request $request, EntityManagerInterface $entityManager, int $projectId, int $universeId, int $branchId): Response
+    public function index(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, IdeasRepository $ideasRepository, Request $request, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId, int $universeId, int $branchId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -36,11 +38,23 @@ class IdeasController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
+        $project = $entityManager->getRepository(Projects::class)->find($projectId);
+        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
         $branch = $entityManager->getRepository(Branches::class)->find($branchId);
 
+        if (!$project) {
+            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+        }
+        if (!$universe) {
+            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+        }
         if (!$branch) {
             throw new EntityNotFoundException('Branch with ID "' . $branchId . '" does not exist.');
         }
+
+        $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_projects_main', ['projectId' => $projectId]));
+        $breadcrumbs->addItem($universe->getName(), $this->generateUrl('app_universes', ['projectId' => $projectId, 'universeId' => $universeId]));
+        $breadcrumbs->addItem($branch->getName());
 
         $displayIdeas = $ideasRepository->findByBranchId($branchId);
 
@@ -183,7 +197,7 @@ class IdeasController extends AbstractController
     }
 
     #[Route('project/{projectId}/universes/{universeId}/branches/{branchId}/ideas/{ideaId}', name: 'app_ideas_generate')]
-    public function generate(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, SynonymsRepository $synonymsRepository, IdeasRepository $ideasRepository, EntityManagerInterface $entityManager, int $projectId, int $universeId, int $branchId, int $ideaId): Response
+    public function generate(ProjectsRepository $projectsRepository, SnippetsRepository $snippetsRepository, SuggestionsRepository $suggestionsRepository, SynonymsRepository $synonymsRepository, IdeasRepository $ideasRepository, EntityManagerInterface $entityManager, Breadcrumbs $breadcrumbs, int $projectId, int $universeId, int $branchId, int $ideaId): Response
     {
         /** @var Users $user */
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -194,9 +208,28 @@ class IdeasController extends AbstractController
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
         $idea = $ideasRepository->find($ideaId);
+        $project = $entityManager->getRepository(Projects::class)->find($projectId);
+        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
+        $branch = $entityManager->getRepository(Branches::class)->find($branchId);
+
         if (!$idea) {
             throw new EntityNotFoundException('Idea with ID "' . $ideaId . '" does not exist.');
         }
+        if (!$project) {
+            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+        }
+        if (!$universe) {
+            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+        }
+        if (!$branch) {
+            throw new EntityNotFoundException('Branch with ID "' . $branchId . '" does not exist.');
+        }
+
+        $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_projects_main', ['projectId' => $projectId]));
+        $breadcrumbs->addItem($universe->getName(), $this->generateUrl('app_universes', ['projectId' => $projectId, 'universeId' => $universeId]));
+        $breadcrumbs->addItem($branch->getName(), $this->generateUrl('app_branches', ['projectId' => $projectId, 'universeId' => $universeId, 'branchID' => $branchId]));
+        $breadcrumbs->addItem($idea->getName());
+
         $ideaName = $idea->getName();
 
         $apiSnippets = $this->callScaleSerpAPISnippets($ideaName);
