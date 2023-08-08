@@ -31,10 +31,13 @@ class UniversesController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-        $project = $entityManager->getRepository(Projects::class)->find($projectId);
+        $project = $entityManager->getRepository(Projects::class)->findOneBy([
+            'id' => $projectId,
+            'users' => $user
+        ]);
 
         if (!$project) {
-            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou projet non trouvé.');
         }
 
         // Ajout des éléments de fil d'Ariane

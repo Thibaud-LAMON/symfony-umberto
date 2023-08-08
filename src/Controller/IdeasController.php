@@ -38,18 +38,27 @@ class IdeasController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-        $project = $entityManager->getRepository(Projects::class)->find($projectId);
-        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
-        $branch = $entityManager->getRepository(Branches::class)->find($branchId);
+        $project = $entityManager->getRepository(Projects::class)->findOneBy([
+            'id' => $projectId,
+            'users' => $user
+        ]);
+        $universe = $entityManager->getRepository(Universes::class)->findOneBy([
+            'id' => $universeId,
+            'projects' => $project
+        ]);
+        $branch = $entityManager->getRepository(Branches::class)->findOneBy([
+            'id' => $branchId,
+            'branches' => $universe
+        ]);
 
         if (!$project) {
-            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou projet non trouvé.');
         }
         if (!$universe) {
-            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou univers non trouvé.');
         }
         if (!$branch) {
-            throw new EntityNotFoundException('Branch with ID "' . $branchId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou branche non trouvée.');
         }
 
         $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_projects_main', ['projectId' => $projectId]));

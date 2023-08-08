@@ -60,10 +60,13 @@ class TreatmentController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-        $project = $entityManager->getRepository(Projects::class)->find($projectId);
+        $project = $entityManager->getRepository(Projects::class)->findOneBy([
+            'id' => $projectId,
+            'users' => $user
+        ]);
 
         if (!$project) {
-            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou projet non trouvé.');
         }
 
         $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
@@ -93,14 +96,20 @@ class TreatmentController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-        $project = $entityManager->getRepository(Projects::class)->find($projectId);
-        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
+        $project = $entityManager->getRepository(Projects::class)->findOneBy([
+            'id' => $projectId,
+            'users' => $user
+        ]);
+        $universe = $entityManager->getRepository(Universes::class)->findOneBy([
+            'id' => $universeId,
+            'projects' => $project
+        ]);
 
         if (!$project) {
-            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou projet non trouvé.');
         }
         if (!$universe) {
-            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou univers non trouvé.');
         }
 
         $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
@@ -132,19 +141,29 @@ class TreatmentController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-        $project = $entityManager->getRepository(Projects::class)->find($projectId);
-        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
-        $branch = $entityManager->getRepository(Branches::class)->find($branchId);
+        $project = $entityManager->getRepository(Projects::class)->findOneBy([
+            'id' => $projectId,
+            'users' => $user
+        ]);
+        $universe = $entityManager->getRepository(Universes::class)->findOneBy([
+            'id' => $universeId,
+            'projects' => $project
+        ]);
+        $branch = $entityManager->getRepository(Branches::class)->findOneBy([
+            'id' => $branchId,
+            'branches' => $universe
+        ]);
 
-        if (!$branch) {
-            throw new EntityNotFoundException('Branch with ID "' . $branchId . '" does not exist.');
-        }
         if (!$project) {
-            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou projet non trouvé.');
         }
         if (!$universe) {
-            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou univers non trouvé.');
         }
+        if (!$branch) {
+            throw new EntityNotFoundException('Accès interdit ou branche non trouvée.');
+        }
+
         $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
         $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_treatment_second', ['projectId' => $projectId, 'universeId' => $universeId]));
         $breadcrumbs->addItem($universe->getName(), $this->generateUrl('app_treatment_third', ['projectId' => $projectId, 'universeId' => $universeId, 'branchId' => $branchId]));
@@ -176,23 +195,36 @@ class TreatmentController extends AbstractController
         $countTrunc = $snippetsRepository->countByTrunc($userId); // Récupère le nombre de Snippets créés par cet utilisateur
         $countSuggestions = $suggestionsRepository->countBySuggestion($userId); // Récupère le nombre de Snippets créés par cet utilisateur
 
-        $project = $entityManager->getRepository(Projects::class)->find($projectId);
-        $universe = $entityManager->getRepository(Universes::class)->find($universeId);
-        $branch = $entityManager->getRepository(Branches::class)->find($branchId);
-        $idea = $entityManager->getRepository(Ideas::class)->find($ideaId);
+        $project = $entityManager->getRepository(Projects::class)->findOneBy([
+            'id' => $projectId,
+            'users' => $user
+        ]);
+        $universe = $entityManager->getRepository(Universes::class)->findOneBy([
+            'id' => $universeId,
+            'projects' => $project
+        ]);
+        $branch = $entityManager->getRepository(Branches::class)->findOneBy([
+            'id' => $branchId,
+            'branches' => $universe
+        ]);
+        $idea = $entityManager->getRepository(Ideas::class)->findOneBy([
+            'id' => $ideaId,
+            'ideas' => $branch
+        ]);
 
-        if (!$branch) {
-            throw new EntityNotFoundException('Branch with ID "' . $branchId . '" does not exist.');
-        }
         if (!$project) {
-            throw new EntityNotFoundException('Project with ID "' . $projectId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou projet non trouvé.');
         }
         if (!$universe) {
-            throw new EntityNotFoundException('Universe with ID "' . $universeId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou univers non trouvé.');
+        }
+        if (!$branch) {
+            throw new EntityNotFoundException('Accès interdit ou branche non trouvée.');
         }
         if (!$idea) {
-            throw new EntityNotFoundException('Idea with ID "' . $ideaId . '" does not exist.');
+            throw new EntityNotFoundException('Accès interdit ou idée non trouvée.');
         }
+
         $breadcrumbs->addItem("Traitement", $this->generateUrl('app_treatment_first', ['projectId' => $projectId]));
         $breadcrumbs->addItem($project->getName(), $this->generateUrl('app_treatment_second', ['projectId' => $projectId, 'universeId' => $universeId]));
         $breadcrumbs->addItem($universe->getName(), $this->generateUrl('app_treatment_third', ['projectId' => $projectId, 'universeId' => $universeId, 'branchId' => $branchId]));
