@@ -9,23 +9,25 @@
 {% block content %}
     <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_main')}}">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    {% if app.user%}
+                    {% if app.user %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_profil_edit') }}"><i class="fa-solid fa-circle-user fa-2xl"></i></a>
                         </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_register') }}">M'inscrire</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_login') }}">Me connecter</a>
-                        </li>
+                        {% if app.request.attributes.get('_route') == 'app_register' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_login') }}">Me connecter</a>
+                            </li>
+                        {% elseif app.request.attributes.get('_route') == 'app_login' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_register') }}">M'inscrire</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
             </div>

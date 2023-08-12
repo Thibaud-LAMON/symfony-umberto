@@ -12,5 +12,22 @@
 
 .breadcrumb a {
     text-decoration: none;
-    /* Supprime la ligne sous le lien */
+}
+
+/* Ajustement pour les écrans moyens (tablettes) */
+@media (max-width: 1025px) {
+    .custom-btn {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+        font-size: 2rem;
+    }
+}
+
+/* Ajustement pour les écrans plus petits (téléphones mobiles) */
+@media (max-width: 769px) {
+    .custom-btn {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        font-size: 1.5rem;
+    }
 }

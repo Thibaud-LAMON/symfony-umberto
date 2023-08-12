@@ -151,7 +151,7 @@ class TreatmentController extends AbstractController
         ]);
         $branch = $entityManager->getRepository(Branches::class)->findOneBy([
             'id' => $branchId,
-            'branches' => $universe
+            'universes' => $universe
         ]);
 
         if (!$project) {
@@ -205,11 +205,11 @@ class TreatmentController extends AbstractController
         ]);
         $branch = $entityManager->getRepository(Branches::class)->findOneBy([
             'id' => $branchId,
-            'branches' => $universe
+            'universes' => $universe
         ]);
         $idea = $entityManager->getRepository(Ideas::class)->findOneBy([
             'id' => $ideaId,
-            'ideas' => $branch
+            'branches' => $branch
         ]);
 
         if (!$project) {

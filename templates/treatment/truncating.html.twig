@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     {{ wo_render_breadcrumbs({separator: '>', listId: 'breadcrumbs'}) }}
-                    <h3>Si vous souhaitez envoyer une sous-chaine, cliquez sur un caractère sinon cliquez sur suivant.</h3>
+                    <h3>Tronquer votre amorce jusqu'au caractère que vous souhaitez, puis supprimer si vous le souhaiter le surplus au début de l'amorce grace à la fenêtre en dessous.</h3>
                     <br>
                     {% if not snippet is null %}
                         {% for i in 0..letters|length - 1 %}

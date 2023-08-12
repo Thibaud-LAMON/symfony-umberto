@@ -4,12 +4,20 @@
             border: 1px solid #07435F;
             color: #07435F;
             font-size: 1rem;
-            width: 15rem;
+            width: 90%; /* Changez ici la largeur */
             height: 4rem;
         }
-        .button-custom:hover{
+        .button-custom:hover {
             background-color: #07435F;
             color: #FFFFFF;
+        }
+
+        /* Ajustement pour les écrans plus petits */
+        @media (max-width: 768px) {
+            .button-custom {
+                font-size: 0.8rem;
+                height: 3rem;
+            }
         }
     </style>
 {% endblock %}

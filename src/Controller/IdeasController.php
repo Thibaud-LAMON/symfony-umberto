@@ -48,7 +48,7 @@ class IdeasController extends AbstractController
         ]);
         $branch = $entityManager->getRepository(Branches::class)->findOneBy([
             'id' => $branchId,
-            'branches' => $universe
+            'universes' => $universe
         ]);
 
         if (!$project) {
