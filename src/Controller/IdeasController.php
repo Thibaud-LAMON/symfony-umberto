@@ -125,10 +125,10 @@ class IdeasController extends AbstractController
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
 
-        $api_result = curl_exec($ch);
+        $apiResult = curl_exec($ch);
         curl_close($ch);
 
-        $output = str_getcsv($api_result, '"" ""');
+        $output = str_getcsv($apiResult, '"" ""');
 
         return $output;
     }
@@ -156,10 +156,10 @@ class IdeasController extends AbstractController
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
 
-        $api_result = curl_exec($ch);
+        $apiResult = curl_exec($ch);
         curl_close($ch);
 
-        $output = str_getcsv($api_result, '"" ""');
+        $output = str_getcsv($apiResult, '"" ""');
 
         return $output;
     }
@@ -174,13 +174,13 @@ class IdeasController extends AbstractController
         $motCle = str_replace(" ", "+", $motCle);
         $urlRecherche = "https://crisco4.unicaen.fr/des/synonymes/" . $motCle;
 
-        $code_html = file_get_contents($urlRecherche);
+        $codeHtml = file_get_contents($urlRecherche);
 
         $start = "<!DOCTYPE";
         $end = '<div id="cliques">';
         $new = "";
 
-        $nettoyage = $this->replace_content_inside_delimiters($start, $end, $new, $code_html);
+        $nettoyage = $this->replace_content_inside_delimiters($start, $end, $new, $codeHtml);
 
         $start = '<div id="mention">';
         $end = '</html>';
@@ -286,9 +286,9 @@ class IdeasController extends AbstractController
 
         $results = [];
 
-        $max_length = max(count($apiSnippets), count($apiSuggests), count($synonyms));
+        $maxLength = max(count($apiSnippets), count($apiSuggests), count($synonyms));
 
-        for ($i = 0; $i < $max_length; $i++) {
+        for ($i = 0; $i < $maxLength; $i++) {
             $snippet = $i < count($apiSnippets) ? $apiSnippets[$i] : Null; // valeur par défaut
             $suggestion = $i < count($apiSuggests) ? $apiSuggests[$i] : Null; // valeur par défaut
             $synonym = $i < count($synonyms) ? $synonyms[$i] : Null; // valeur par défaut
