@@ -1,3 +1,7 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .custom-btn {
     padding-top: 8.25rem;
     padding-bottom: 8.25rem;
@@ -12,6 +16,12 @@
 
 .breadcrumb a {
     text-decoration: none;
+}
+
+.numbers {
+    background-color: #07435F !important;
+    border: #07435F;
+    color: #ffffff;
 }
 
 /* Ajustement pour les écrans moyens (tablettes) */
