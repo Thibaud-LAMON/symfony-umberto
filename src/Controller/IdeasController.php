@@ -164,7 +164,7 @@ class IdeasController extends AbstractController
         return $output;
     }
 
-    public function replace_content_inside_delimiters($start, $end, $new, $Ligne)
+    public function replaceContentInsideDelimiters($start, $end, $new, $Ligne)
     {
         return preg_replace('#(' . preg_quote($start) . ')(.*)(' . preg_quote($end) . ')#si', '$1' . $new . '$3', $Ligne);
     }
@@ -180,13 +180,13 @@ class IdeasController extends AbstractController
         $end = '<div id="cliques">';
         $new = "";
 
-        $nettoyage = $this->replace_content_inside_delimiters($start, $end, $new, $codeHtml);
+        $nettoyage = $this->replaceContentInsideDelimiters($start, $end, $new, $codeHtml);
 
         $start = '<div id="mention">';
         $end = '</html>';
         $new = "";
 
-        $nettoyage = $this->replace_content_inside_delimiters($start, $end, $new, $nettoyage);
+        $nettoyage = $this->replaceContentInsideDelimiters($start, $end, $new, $nettoyage);
 
         $synoList = explode('<li>', $nettoyage);
 
