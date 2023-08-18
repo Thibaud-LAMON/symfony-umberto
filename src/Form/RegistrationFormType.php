@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Users;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,15 +30,6 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'Username'
-            ])
-            ->add('RGPDConsent', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-                'label' => 'En m\'inscrivant à ce site j\'accepte...'
             ])
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,

@@ -303,9 +303,9 @@ class TreatmentController extends AbstractController
 
         $results = [];
 
-        $max_length = max(count($truncatedSnippets), count($suggestions), count($synonyms));
+        $maxLength = max(count($truncatedSnippets), count($suggestions), count($synonyms));
 
-        for ($i = 0; $i < $max_length; $i++) {
+        for ($i = 0; $i < $maxLength; $i++) {
             $truncSnippet = $i < count($truncatedSnippets) ? $truncatedSnippets[$i]->getTruncated() : Null; // valeur par défaut
             $suggestion = $i < count($suggestions) ? $suggestions[$i]->getSuggestion() : Null; // valeur par défaut
             $synonym = $i < count($synonyms) ? $synonyms[$i]->getSynonym() : Null; // valeur par défaut
