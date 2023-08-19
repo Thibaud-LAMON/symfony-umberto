@@ -164,9 +164,9 @@ class IdeasController extends AbstractController
         return $output;
     }
 
-    public function replaceContentInsideDelimiters($start, $end, $new, $Ligne)
+    public function replaceContentInsideDelimiters($start, $end, $new, $ligne)
     {
-        return preg_replace('#(' . preg_quote($start) . ')(.*)(' . preg_quote($end) . ')#si', '$1' . $new . '$3', $Ligne);
+        return preg_replace('#(' . preg_quote($start) . ')(.*)(' . preg_quote($end) . ')#si', '$1' . $new . '$3', $ligne);
     }
 
     public function synonyms($motCle)
