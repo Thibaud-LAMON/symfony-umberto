@@ -5,6 +5,16 @@
 {% block body %}
 <section class="container">
     <div class="row">
+        {% if app.flashes('echec') %}
+            <br>
+            <div class="mb-3">
+                <div class="alert alert-danger" role="alert">
+                    {% for message in app.flashes('echec') %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
         <div class="col col-5 position-absolute top-50 start-50 translate-middle border border-dark rounded-3 p-3">
             <h1>Inscrivez-vous !</h1>
                 {% if app.user %}

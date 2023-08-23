@@ -3,37 +3,34 @@
 {% block title %}Profil de {{app.user.username}}{% endblock %}
 
 {% block body %}
-
 <div class="row">
-        <div class="col-2">
-            {% include "_partials/_sidenav/_profile.html.twig" %}
-        </div>
-
-        <div class="col-8">
-            {% for message in app.flashes('message') %}
-                <br>
-                <div class="col-8">
-                    <div class="alert alert-success" role="alert">{{message}}</div>
-                </div>
-            {% endfor %}    
-            
-            <section class="container col-8">
-                <div class="row">
-                    <h1 class="mt-5">Bonjour {{app.user.username}} !</h1>
-                    <p class="fs-2">Vous pouvez modifier vos informations ici !</p>
-                    <div class="col col-5 position-absolute top-50 start-50 translate-middle border border-dark rounded-3 p-3">
-                        {{ form_start(formEdit) }}
-                            {{ form_row(formEdit.email) }}
-                            {{ form_row(formEdit.username) }}
-
-                            <button type="submit" class="btn btn-primary btn-lg btn-color mt-4 ">Modifier</button>
-                        {{ form_end(formEdit) }}
-                        <a href="{{ path('app_logout') }}"  class="position-absolute bottom-0 end-0 me-3">
-                            <button class="btn btn-primary btn-lg btn-color my-3">Déconnexion</button>
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </div>
+    <div class="col-2">
+        {% include "_partials/_sidenav/_profile.html.twig" %}
     </div>
+    <div class="col-8">
+        {% for message in app.flashes('message') %}
+            <br>
+            <div class="col-8">
+                <div class="alert alert-success" role="alert">{{message}}</div>
+            </div>
+        {% endfor %}    
+        
+        <section class="container col-8">
+            <div class="row">
+                <h1 class="mt-5">Bonjour {{app.user.username}} !</h1>
+                <p class="fs-2">Vous pouvez modifier vos informations ici !</p>
+                <div class="col col-5 position-absolute top-50 start-50 translate-middle border border-dark rounded-3 p-3">
+                    {{ form_start(formEdit) }}
+                        {{ form_row(formEdit.email) }}
+                        {{ form_row(formEdit.username) }}
+                        <button type="submit" class="btn btn-primary btn-lg btn-color mt-4 ">Modifier</button>
+                    {{ form_end(formEdit) }}
+                    <a href="{{ path('app_logout') }}"  class="position-absolute bottom-0 end-0 me-3">
+                        <button class="btn btn-primary btn-lg btn-color my-3">Déconnexion</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
 {% endblock %}
